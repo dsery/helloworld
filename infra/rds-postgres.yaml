@@ -21,7 +21,11 @@ spec:
     storageEncrypted: true
     dbName: helloworld
     username: helloworld_admin
-    manageMasterUserPassword: true
+    autoGeneratePassword: true
+    passwordSecretRef:
+      name: helloworld-dev-db-master-password
+      namespace: crossplane-system
+      key: password
     dbSubnetGroupName: idp-platform-dev-db-subnet-group
     publiclyAccessible: false
     multiAz: false
@@ -32,5 +36,8 @@ spec:
       Environment: dev
       ManagedBy: Crossplane
       ProvisionedVia: Backstage-GoldenPath
+  writeConnectionSecretToRef:
+    name: helloworld-dev-db-connection
+    namespace: crossplane-system
   providerConfigRef:
     name: aws-dev
