@@ -1,0 +1,36 @@
+# Manifeste Crossplane exécuté sur le cluster Hub (global)
+# Provisionne une instance RDS PostgreSQL dans les subnets database du compte Spoke (dev : 948025766648) via ProviderConfig aws-dev
+apiVersion: rds.aws.upbound.io/v1beta1
+kind: Instance
+metadata:
+  name: helloworld-dev-db
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+  labels:
+    app.kubernetes.io/name: helloworld
+    app.kubernetes.io/env: dev
+    backstage.io/kubernetes-id: helloworld
+spec:
+  forProvider:
+    region: eu-west-3
+    engine: postgres
+    engineVersion: "16"
+    instanceClass: db.t4g.micro
+    allocatedStorage: 20
+    storageType: gp3
+    storageEncrypted: true
+    dbName: helloworld
+    username: helloworld_admin
+    manageMasterUserPassword: true
+    dbSubnetGroupName: idp-platform-dev-db-subnet-group
+    publiclyAccessible: false
+    multiAz: false
+    skipFinalSnapshot: true
+    autoMinorVersionUpgrade: true
+    tags:
+      Application: helloworld
+      Environment: dev
+      ManagedBy: Crossplane
+      ProvisionedVia: Backstage-GoldenPath
+  providerConfigRef:
+    name: aws-dev

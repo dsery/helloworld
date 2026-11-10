@@ -1,0 +1,48 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: helloworld
+  description: Application Hello World Golden Path déployée sur EKS Spoke avec S3 et RDS PostgreSQL via Crossplane
+  annotations:
+    github.com/project-slug: dsery/helloworld
+    backstage.io/kubernetes-id: helloworld
+    backstage.io/kubernetes-namespace: helloworld
+  tags:
+    - dev
+    - eks
+    - crossplane
+  links:
+    - url: https://helloworld.dev.dsery.me
+      title: Application URL (HTTPS)
+      icon: web
+    - url: https://argocd.global.dsery.me/applications/argocd/helloworld-dev
+      title: ArgoCD Application (Workload K8s)
+      icon: dashboard
+    - url: https://argocd.global.dsery.me/applications/argocd/helloworld-dev-infra
+      title: ArgoCD Application (Infra Crossplane)
+      icon: cloud
+spec:
+  type: service
+  lifecycle: dev
+  owner: group:default/platform-team
+  dependsOn:
+    - resource:default/helloworld-dev-s3
+    - resource:default/helloworld-dev-rds
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: helloworld-dev-s3
+  description: "Bucket Amazon S3 (helloworld-dev-assets-948025766648) provisionné par Crossplane dans le compte dev (948025766648)"
+spec:
+  type: s3-bucket
+  owner: group:default/platform-team
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: helloworld-dev-rds
+  description: "Instance Amazon RDS PostgreSQL 16 (db.t4g.micro) provisionnée par Crossplane dans le compte dev (948025766648)"
+spec:
+  type: database
+  owner: group:default/platform-team

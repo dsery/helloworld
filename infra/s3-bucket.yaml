@@ -1,0 +1,41 @@
+# Manifestes Crossplane exécutés sur le cluster Hub (global)
+# Provisionnent le Bucket S3 dans le compte AWS Spoke (dev : 948025766648) via ProviderConfig aws-dev
+apiVersion: s3.aws.upbound.io/v1beta1
+kind: Bucket
+metadata:
+  name: helloworld-dev-assets-948025766648
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+  labels:
+    app.kubernetes.io/name: helloworld
+    app.kubernetes.io/env: dev
+    backstage.io/kubernetes-id: helloworld
+spec:
+  forProvider:
+    region: eu-west-3
+    forceDestroy: true
+    tags:
+      Application: helloworld
+      Environment: dev
+      ManagedBy: Crossplane
+      ProvisionedVia: Backstage-GoldenPath
+  providerConfigRef:
+    name: aws-dev
+---
+apiVersion: s3.aws.upbound.io/v1beta1
+kind: BucketPublicAccessBlock
+metadata:
+  name: helloworld-dev-assets-948025766648-pab
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  forProvider:
+    region: eu-west-3
+    bucketRef:
+      name: helloworld-dev-assets-948025766648
+    blockPublicAcls: true
+    blockPublicPolicy: true
+    ignorePublicAcls: true
+    restrictPublicBuckets: true
+  providerConfigRef:
+    name: aws-dev

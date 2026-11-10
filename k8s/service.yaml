@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: helloworld
+  namespace: helloworld
+  labels:
+    app.kubernetes.io/name: helloworld
+    backstage.io/kubernetes-id: helloworld
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: helloworld
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
