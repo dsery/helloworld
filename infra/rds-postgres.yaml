@@ -13,6 +13,8 @@ metadata:
 spec:
   forProvider:
     region: eu-west-3
+    identifier: helloworld-dev-948025766648
+    applyImmediately: true
     engine: postgres
     engineVersion: "16"
     instanceClass: db.t4g.micro
